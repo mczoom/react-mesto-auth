@@ -1,0 +1,10 @@
+.item__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 282px;
+    min-height: 79px;
+    padding: 0 15px 0 21px;
+    background-color: #fff;
+    border-radius: 0 0 10px 10px;
+  }

@@ -1,0 +1,22 @@
+.profile__wrap {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 16px;
+    padding: 0;
+  }
+
+  @media screen and (max-width: 767px) {
+  .profile__wrap {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 14px;
+    padding: 0;
+  }
+}  
+
+@media screen and (max-width: 424px) {
+  .profile__wrap {
+    width: 100%;
+    justify-content: space-between;
+  }  
+}

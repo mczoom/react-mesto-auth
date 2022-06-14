@@ -1,0 +1,18 @@
+.popup__section {    
+    position: relative;
+    margin: 54px auto 36px;
+    width: calc(100% - 72px);
+    height: 30px;
+}
+
+.popup__section:last-of-type {    
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .popup__section {
+        width: calc(100% - 44px);
+        margin-top: 75px;
+    }  
+  }

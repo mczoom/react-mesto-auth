@@ -1,0 +1,17 @@
+.popup-add-item__input {
+    padding: 0;
+    width: calc(100% - 72px);
+    height: 27px;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 121%;
+    font-weight: 400;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+@media screen and (max-width: 767px) {
+    .popup-add-item__input {
+        width: calc(100% - 44px);
+    }  
+  }
