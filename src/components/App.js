@@ -9,6 +9,8 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import api from '../utils/Api';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import { Route, Switch } from 'react-router-dom';
+import Login from './Login';
 
 
 function App() {
@@ -124,6 +126,8 @@ function handleCardDelete (card) {
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
       <Header />
+      <Switch>
+      <Route exact path='/'>
       <Main cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
        onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete}/>
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
@@ -131,6 +135,11 @@ function handleCardDelete (card) {
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
       <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
       <ConfirmationPopup onConfirmDelete={handleCardDelete} isOpen={isConfirmationPopupOpen} onClose={closeAllPopups} card={cardToDelete} isLoading={isLoading} />
+      </Route>
+      <Route path='/sign-in'>
+        <Login />
+      </Route>
+      </Switch>
       <Footer />
   </div>
   </CurrentUserContext.Provider>
