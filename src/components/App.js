@@ -9,8 +9,10 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import api from '../utils/Api';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link, Redirect } from 'react-router-dom';
 import Login from './Login';
+import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
 
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isLogged, setIsLogged] = React.useState(false);
   
 
   React.useEffect(() => {
@@ -127,18 +130,23 @@ function handleCardDelete (card) {
     <div className="page">
       <Header />
       <Switch>
-      <Route exact path='/'>
-      <Main cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
-       onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete}/>
+      <Route path='/sign-up'>
+        <Register />
+      </Route>
+      <Route path='/sign-in'>
+        <Login />
+      </Route>
+      
+      <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
+       onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete} isLogged={isLogged} component={Main} />
+      
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
       <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
       <ConfirmationPopup onConfirmDelete={handleCardDelete} isOpen={isConfirmationPopupOpen} onClose={closeAllPopups} card={cardToDelete} isLoading={isLoading} />
-      </Route>
-      <Route path='/sign-in'>
-        <Login />
-      </Route>
+     
+      
       </Switch>
       <Footer />
   </div>

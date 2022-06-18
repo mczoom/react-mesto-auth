@@ -1,7 +1,7 @@
 import React from 'react';
 import Auth from './Auth';
 
-export default function Login() {
+export default function Register() {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -15,7 +15,7 @@ export default function Login() {
     }
 
     return(
-        <Auth title="Вход" buttonText="Войти" formName="login">
+        <Auth title="Регистрация" buttonText="Зарегистрироваться" formName="register">
           <div className="popup__section">
             <input className="popup__input popup__input_type_name popup__input_auth" id="username-input" value={email || ''} onChange={handleChangeEmailInput} 
             placeholder="Email" name="username" type="text" minLength="2" maxLength="40" required />
