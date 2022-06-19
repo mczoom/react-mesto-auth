@@ -1,5 +1,6 @@
 import React from 'react';
-import Auth from './Auth';
+import AuthSection from './AuthSection';
+import * as auth from '../utils/auth';
 
 export default function Login() {
 
@@ -14,8 +15,13 @@ export default function Login() {
         setPassword(e.target.value);
     }
 
+    function handleSubmitLogin(e){
+        e.preventDefault();
+        auth.login(email, password);    
+  }
+
     return(
-        <Auth title="Вход" buttonText="Войти" formName="login">
+        <AuthSection title="Вход" buttonText="Войти" formName="login" onSubmit={handleSubmitLogin}>
           <div className="popup__section">
             <input className="popup__input popup__input_type_name popup__input_auth" id="username-input" value={email || ''} onChange={handleChangeEmailInput} 
             placeholder="Email" name="username" type="text" minLength="2" maxLength="40" required />
@@ -26,6 +32,6 @@ export default function Login() {
             placeholder="Пароль" name="useroccupation" type="password" minLength="6" maxLength="200" required />
             <span className="popup__input-error occupation-input-error"></span>
           </div>
-        </Auth>
+        </AuthSection>
     )
 }

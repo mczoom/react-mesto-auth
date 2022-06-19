@@ -1,5 +1,6 @@
 import React from 'react';
-import Auth from './Auth';
+import AuthSection from './AuthSection';
+import * as auth from '../utils/auth';
 
 export default function Register() {
 
@@ -14,8 +15,13 @@ export default function Register() {
         setPassword(e.target.value);
     }
 
+    function handleSubmit(e){
+        e.preventDefault();
+        auth.register(email, password);    
+  }
+
     return(
-        <Auth title="Регистрация" buttonText="Зарегистрироваться" formName="register">
+        <AuthSection title="Регистрация" buttonText="Зарегистрироваться" formName="register" onSubmit={handleSubmit}>
           <div className="popup__section">
             <input className="popup__input popup__input_type_name popup__input_auth" id="username-input" value={email || ''} onChange={handleChangeEmailInput} 
             placeholder="Email" name="username" type="text" minLength="2" maxLength="40" required />
@@ -26,6 +32,6 @@ export default function Register() {
             placeholder="Пароль" name="useroccupation" type="password" minLength="6" maxLength="200" required />
             <span className="popup__input-error occupation-input-error"></span>
           </div>
-        </Auth>
+        </AuthSection>
     )
 }

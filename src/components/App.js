@@ -128,7 +128,7 @@ function handleCardDelete (card) {
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-      <Header />
+      <Header isLogged={isLogged} />
       <Switch>
       <Route path='/sign-up'>
         <Register />
