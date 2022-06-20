@@ -9,10 +9,16 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import api from '../utils/Api';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import { Route, Switch, Link, Redirect } from 'react-router-dom';
+import { Route, Switch, Link, Redirect, useHistory } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
+import * as auth from '../utils/auth';
+import InfoTooltip from './InfoTooltip';
+
+import accepted from '../images/accepted.svg';
+import rejected from '../images/rejected.svg';
+
 
 
 function App() {
@@ -21,12 +27,17 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupState] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupState] = React.useState(false);
   const [isConfirmationPopupOpen, setConfirmationPopupOpen] = React.useState(false);
+  const [isRegistrationPopupOpen, setRegistrationPopupOpen] = React.useState(false);
   const [cardToDelete, setCardToDelete] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLogged, setIsLogged] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [registrationResponse, setRegistrationResponse] = React.useState({ image: '', text: '' });
+
+  const history = useHistory();
   
 
   React.useEffect(() => {
@@ -83,11 +94,16 @@ function handleCardDelete (card) {
     setConfirmationPopupOpen(!isConfirmationPopupOpen);
   }
 
+  function openRegistrationPopup () {
+    setRegistrationPopupOpen(!isRegistrationPopupOpen);
+  }
+
   function closeAllPopups () {
     setEditProfilePopupState(false);
     setAddPlacePopupState(false);
     setEditAvatarPopupState(false);
     setConfirmationPopupOpen(false);
+    setRegistrationPopupOpen(false);
     setSelectedCard(false);
   }
 
@@ -123,18 +139,79 @@ function handleCardDelete (card) {
       .catch(err => console.log(err))
       .finally(() => setIsLoading(false))
   }
+
+  
+  function handleRegistration(email, password) {
+    auth.register(email, password)
+      .then((res) => {
+        setEmail(res.data.email)
+        setRegistrationResponse({ image: accepted, text: 'Вы успешно зарегистрировались!' })
+      })
+      .catch(() => setRegistrationResponse({ image: rejected, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
+      .finally(() => setRegistrationPopupOpen(true))
+  }
+
+  
+  
+  function tokenCheck() {
+    const token = localStorage.getItem('token');  
+    if(token) {    
+      auth.getContent(token)         
+        .then((res) => {
+          if(res) {
+            setIsLogged(true);
+            setEmail(res.data.email)
+            history.push('/');
+          }
+        })
+        .catch(err => console.log(err)); 
+      }
+  }  
+
+  React.useEffect(() => {
+    tokenCheck()    
+  }, [])
+
+
+
+  function onLogin(login, password) {
+  auth.login(login, password)
+  .then((data) => {
+    
+    if(data.token) {
+      localStorage.setItem('token', data.token);
+      setIsLogged(true);
+      history.push('/');            
+    }
+  })
+}
+
+
+
+
+
+
+
   
 
+
+
+
+
+
+
+  
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-      <Header isLogged={isLogged} />
+      <Header isLogged={isLogged} email={email}/>
       <Switch>
       <Route path='/sign-up'>
-        <Register />
+        <Register onRegister={handleRegistration} />
+        <InfoTooltip isOpen={isRegistrationPopupOpen} onClose={closeAllPopups} registrationResponse={registrationResponse} />
       </Route>
       <Route path='/sign-in'>
-        <Login />
+        <Login handleLogIn={onLogin}/>
       </Route>
       
       <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}

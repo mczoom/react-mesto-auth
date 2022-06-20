@@ -69,3 +69,7 @@
 @import url(./blocks/header/__email/header__email.css);
 @import url(./blocks/header/__email/_on/header__email_on.css);
 @import url(./blocks/header/__link/header__link.css);
+@import url(./blocks/header/__button/header__button.css);
+@import url(./blocks/popup/__image/popup__image.css);
+@import url(./blocks/popup-registration/__container/popup-registration__container.css);
+@import url(./blocks/popup-registration/__title/popup-registration__title.css);

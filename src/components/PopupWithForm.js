@@ -13,7 +13,6 @@ function PopupWithForm ({title, name, buttonText, isOpen, onClose, children, onS
           </form>
         </div>
       </div>
-
     )
 }
 

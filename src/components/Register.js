@@ -2,7 +2,7 @@ import React from 'react';
 import AuthSection from './AuthSection';
 import * as auth from '../utils/auth';
 
-export default function Register() {
+export default function Register({onRegister}) {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -17,7 +17,7 @@ export default function Register() {
 
     function handleSubmit(e){
         e.preventDefault();
-        auth.register(email, password);    
+        onRegister(email, password);    
   }
 
     return(
