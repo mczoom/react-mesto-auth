@@ -13,7 +13,6 @@ export default function Auth({title, buttonText, formName, children, onSubmit}) 
             <button className="submit-button submit-button_auth" type="submit">{buttonText}</button>
             {formName === "register" && <Link className="link" to='/sign-in'>Уже зарегистрированы? Войти</Link>}
           </form>
-        </div>
-         
+        </div>         
       )
 }

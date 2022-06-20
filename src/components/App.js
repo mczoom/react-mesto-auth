@@ -1,4 +1,8 @@
 import React from 'react';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import { Route, Switch, Link, Redirect, useHistory } from 'react-router-dom';
+
+import * as auth from '../utils/auth';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -8,12 +12,9 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import api from '../utils/Api';
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import { Route, Switch, Link, Redirect, useHistory } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import * as auth from '../utils/auth';
 import InfoTooltip from './InfoTooltip';
 
 import accepted from '../images/accepted.svg';
@@ -125,8 +126,8 @@ function handleCardDelete (card) {
         setCurrentUser(data);
         closeAllPopups ();
       })
-        .catch(err => console.log(err))
-        .finally(() => setIsLoading(false))
+      .catch(err => console.log(err))
+      .finally(() => setIsLoading(false))
   }
 
   function handleAddPlaceSubmit(card) {
@@ -140,6 +141,18 @@ function handleCardDelete (card) {
       .finally(() => setIsLoading(false))
   }
 
+
+  function onLogin(login, password) {
+    auth.login(login, password)
+    .then((data) => {    
+      if(data.token) {
+        localStorage.setItem('token', data.token);
+        setIsLogged(true);
+        history.push('/');            
+      }
+    })
+  }
+
   
   function handleRegistration(email, password) {
     auth.register(email, password)
@@ -150,7 +163,6 @@ function handleCardDelete (card) {
       .catch(() => setRegistrationResponse({ image: rejected, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
       .finally(() => setRegistrationPopupOpen(true))
   }
-
   
   
   function tokenCheck() {
@@ -171,34 +183,7 @@ function handleCardDelete (card) {
   React.useEffect(() => {
     tokenCheck()    
   }, [])
-
-
-
-  function onLogin(login, password) {
-  auth.login(login, password)
-  .then((data) => {
-    
-    if(data.token) {
-      localStorage.setItem('token', data.token);
-      setIsLogged(true);
-      history.push('/');            
-    }
-  })
-}
-
-
-
-
-
-
-
   
-
-
-
-
-
-
 
   
   return (
@@ -216,15 +201,14 @@ function handleCardDelete (card) {
       
       <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
        onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete} isLogged={isLogged} component={Main} />
+       </Switch>
       
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
       <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
-      <ConfirmationPopup onConfirmDelete={handleCardDelete} isOpen={isConfirmationPopupOpen} onClose={closeAllPopups} card={cardToDelete} isLoading={isLoading} />
-     
+      <ConfirmationPopup onConfirmDelete={handleCardDelete} isOpen={isConfirmationPopupOpen} onClose={closeAllPopups} card={cardToDelete} isLoading={isLoading} />      
       
-      </Switch>
       <Footer />
   </div>
   </CurrentUserContext.Provider>

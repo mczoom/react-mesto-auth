@@ -1,5 +1,5 @@
 import React from 'react';
-import accepted from '../images/accepted.svg';
+
 
 export default function InfoTooltip({isOpen, onClose, registrationResponse}) {
 
@@ -13,5 +13,4 @@ export default function InfoTooltip({isOpen, onClose, registrationResponse}) {
         </div>
       </div>
     )
-
 }
