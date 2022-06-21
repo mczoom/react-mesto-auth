@@ -95,17 +95,14 @@ function handleCardDelete (card) {
     setConfirmationPopupOpen(!isConfirmationPopupOpen);
   }
 
-  function openRegistrationPopup () {
-    setRegistrationPopupOpen(!isRegistrationPopupOpen);
-  }
-
+  
   function closeAllPopups () {
     setEditProfilePopupState(false);
     setAddPlacePopupState(false);
     setEditAvatarPopupState(false);
     setConfirmationPopupOpen(false);
     setRegistrationPopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   }
 
   function handleUpdateUser(userInfo) {
@@ -151,6 +148,7 @@ function handleCardDelete (card) {
         history.push('/');            
       }
     })
+    .catch(err => console.log(err))
   }
 
   
@@ -196,7 +194,7 @@ function handleCardDelete (card) {
         <InfoTooltip isOpen={isRegistrationPopupOpen} onClose={closeAllPopups} registrationResponse={registrationResponse} />
       </Route>
       <Route path='/sign-in'>
-        <Login handleLogIn={onLogin}/>
+        <Login handleLogIn={onLogin} />
       </Route>
       
       <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
