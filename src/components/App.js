@@ -1,6 +1,6 @@
 import React from 'react';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import { Route, Switch, Link, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import * as auth from '../utils/auth';
 import Header from './Header';
@@ -162,17 +162,21 @@ function handleCardDelete (card) {
       .finally(() => setRegistrationPopupOpen(true))
   }
   
+
+  function signOut() {
+    localStorage.removeItem('token');
+    history.push('/sign-in');
+  }
+
   
   function tokenCheck() {
     const token = localStorage.getItem('token');  
     if(token) {    
       auth.getContent(token)         
-        .then((res) => {
-          if(res) {
+        .then((res) => {          
             setIsLogged(true);
             setEmail(res.data.email)
-            history.push('/');
-          }
+            history.push('/');          
         })
         .catch(err => console.log(err)); 
       }
@@ -180,14 +184,14 @@ function handleCardDelete (card) {
 
   React.useEffect(() => {
     tokenCheck()    
-  }, [])
-  
+  }, [isLogged])
 
+  
   
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-      <Header isLogged={isLogged} email={email}/>
+      <Header isLogged={isLogged} email={email} signOut={signOut} />
       <Switch>
       <Route path='/sign-up'>
         <Register onRegister={handleRegistration} />

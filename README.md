@@ -7,5 +7,5 @@
 - JS
 - React
 
-## Сыылка на сайт
+## Ссылка на сайт
 https://mczoom.github.io/mesto-react/
