@@ -2,20 +2,17 @@ import React from 'react';
 import logo from '../images/logo.svg';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 
-function Header({isLogged, email, signOut}) {
+function Header({isLoggedIn, email, signOut}) {
 
   const location = useLocation();
-  const history = useHistory();
+    
   
-  
-  console.log(isLogged)
-
   return (
     <header className="header">
       <div className="header__container">  
         <img src={logo} className="header__logo" alt="логотип сервиса Mesto" />
         <div className="header__info">
-          {isLogged && location.pathname === "/" ? 
+          {isLoggedIn && location.pathname === "/" ? 
           <>
             <p className="header__email header__email_on">{email}</p>
             <button className="header__link header__button" onClick={signOut}>Выйти</button>

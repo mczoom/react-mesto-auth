@@ -34,7 +34,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isLogged, setIsLogged] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [registrationResponse, setRegistrationResponse] = React.useState({ image: '', text: '' });
 
@@ -42,12 +42,14 @@ function App() {
   
 
   React.useEffect(() => {
+    if(isLoggedIn) {
     api.getInitialCards()
       .then((data) => {
         setCards(data);        
     })
       .catch(err => console.log(err));
-}, [])
+  }
+}, [isLoggedIn])
 
 
 function handleCardLike (card) {
@@ -70,13 +72,17 @@ function handleCardDelete (card) {
     .finally(() => setIsLoading(false));
 }
 
-  React.useEffect(() => {
-    api.getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
+
+
+  React.useEffect(() => {        
+    if(isLoggedIn) {
+      api.getUserInfo()
+      .then((data) => {        
+        setCurrentUser(data);     
       })
       .catch(err => console.log(err));
-}, [])
+    }
+}, [isLoggedIn])
  
 
   function editProfile () {
@@ -144,7 +150,7 @@ function handleCardDelete (card) {
     .then((data) => {    
       if(data.token) {
         localStorage.setItem('token', data.token);
-        setIsLogged(true);
+        setIsLoggedIn(true);
         history.push('/');            
       }
     })
@@ -174,7 +180,7 @@ function handleCardDelete (card) {
     if(token) {    
       auth.getContent(token)         
         .then((res) => {          
-            setIsLogged(true);
+            setIsLoggedIn(true);
             setEmail(res.data.email)
             history.push('/');          
         })
@@ -184,14 +190,14 @@ function handleCardDelete (card) {
 
   React.useEffect(() => {
     tokenCheck()    
-  }, [isLogged])
+  }, [isLoggedIn])
 
   
   
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-      <Header isLogged={isLogged} email={email} signOut={signOut} />
+      <Header isLoggedIn={isLoggedIn} email={email} signOut={signOut} />
       <Switch>
       <Route path='/sign-up'>
         <Register onRegister={handleRegistration} />
@@ -202,7 +208,7 @@ function handleCardDelete (card) {
       </Route>
       
       <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
-       onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete} isLogged={isLogged} component={Main} />
+       onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete} isLoggedIn={isLoggedIn} component={Main} />
        </Switch>
       
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
