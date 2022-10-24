@@ -6,6 +6,3 @@
 - CSS (Адаптивная верстка)
 - JS
 - React
-
-## Ссылка на сайт
-https://mczoom.github.io/mesto-react/
