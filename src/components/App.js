@@ -39,13 +39,13 @@ function App() {
   const [registrationResponse, setRegistrationResponse] = React.useState({ image: '', text: '' });
 
   const history = useHistory();
-  
+
 
   React.useEffect(() => {
     if(isLoggedIn) {
     api.getInitialCards()
       .then((data) => {
-        setCards(data);        
+        setCards(data);
     })
       .catch(err => console.log(err));
   }
@@ -74,16 +74,16 @@ function handleCardDelete (card) {
 
 
 
-  React.useEffect(() => {        
+  React.useEffect(() => {
     if(isLoggedIn) {
       api.getUserInfo()
-      .then((data) => {        
-        setCurrentUser(data);     
+      .then((data) => {
+        setCurrentUser(data);
       })
       .catch(err => console.log(err));
     }
 }, [isLoggedIn])
- 
+
 
   function editProfile () {
     setEditProfilePopupState(!isEditProfilePopupOpen);
@@ -101,7 +101,6 @@ function handleCardDelete (card) {
     setConfirmationPopupOpen(!isConfirmationPopupOpen);
   }
 
-  
   function closeAllPopups () {
     setEditProfilePopupState(false);
     setAddPlacePopupState(false);
@@ -144,20 +143,18 @@ function handleCardDelete (card) {
       .finally(() => setIsLoading(false))
   }
 
-
   function onLogin(login, password) {
     auth.login(login, password)
-    .then((data) => {    
+    .then((data) => {
       if(data.token) {
         localStorage.setItem('token', data.token);
         setIsLoggedIn(true);
-        history.push('/');            
+        history.push('/');
       }
     })
     .catch(err => console.log(err))
   }
 
-  
   function handleRegistration(email, password) {
     auth.register(email, password)
       .then((res) => {
@@ -167,59 +164,55 @@ function handleCardDelete (card) {
       .catch(() => setRegistrationResponse({ image: rejected, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
       .finally(() => setRegistrationPopupOpen(true))
   }
-  
 
   function signOut() {
     localStorage.removeItem('token');
     history.push('/sign-in');
   }
 
-  
   function tokenCheck() {
-    const token = localStorage.getItem('token');  
-    if(token) {    
-      auth.getContent(token)         
-        .then((res) => {          
+    const token = localStorage.getItem('token');
+    if(token) {
+      auth.getContent(token)
+        .then((res) => {
             setIsLoggedIn(true);
             setEmail(res.data.email)
-            history.push('/');          
+            history.push('/');
         })
-        .catch(err => console.log(err)); 
-      }
-  }  
+        .catch(err => console.log(err));
+    }
+  }
 
   React.useEffect(() => {
-    tokenCheck()    
+    tokenCheck()
   }, [isLoggedIn])
 
-  
-  
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-    <div className="page">
-      <Header isLoggedIn={isLoggedIn} email={email} signOut={signOut} />
-      <Switch>
-      <Route path='/sign-up'>
-        <Register onRegister={handleRegistration} />
-        <InfoTooltip isOpen={isRegistrationPopupOpen} onClose={closeAllPopups} registrationResponse={registrationResponse} />
-      </Route>
-      <Route path='/sign-in'>
-        <Login handleLogIn={onLogin} />
-      </Route>
-      
-      <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
-       onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete} isLoggedIn={isLoggedIn} component={Main} />
-       </Switch>
-      
-      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
-      <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
-      <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
-      <ConfirmationPopup onConfirmDelete={handleCardDelete} isOpen={isConfirmationPopupOpen} onClose={closeAllPopups} card={cardToDelete} isLoading={isLoading} />      
-      
-      <Footer />
-  </div>
-  </CurrentUserContext.Provider>
+      <div className="page">
+        <Header isLoggedIn={isLoggedIn} email={email} signOut={signOut} />
+        <Switch>
+        <Route path='/sign-up'>
+          <Register onRegister={handleRegistration} />
+          <InfoTooltip isOpen={isRegistrationPopupOpen} onClose={closeAllPopups} registrationResponse={registrationResponse} />
+        </Route>
+        <Route path='/sign-in'>
+          <Login handleLogIn={onLogin} />
+        </Route>
+        <ProtectedRoute exact path='/' cards={cards} onEditProfile={editProfile} onAddPlace={addPlace} onEditAvatar={editAvatar} onConfirmPopup={openConfirmPopup}
+        onCardClick={setSelectedCard} onCardLike={handleCardLike} onCardDelete={setCardToDelete} isLoggedIn={isLoggedIn} component={Main} />
+        </Switch>
+
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
+        <ConfirmationPopup onConfirmDelete={handleCardDelete} isOpen={isConfirmationPopupOpen} onClose={closeAllPopups} card={cardToDelete} isLoading={isLoading} />
+        <Footer />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
