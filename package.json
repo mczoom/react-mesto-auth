@@ -1,7 +1,6 @@
 {
   "name": "mesto-react",
   "version": "0.1.0",
-  "main": "index.js",
   "homepage": ".",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
