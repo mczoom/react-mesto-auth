@@ -48,30 +48,29 @@ function App() {
         setCards(data);
     })
       .catch(err => console.log(err));
+    }
+  }, [isLoggedIn])
+
+
+  function handleCardLike (card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    api.toggleLikeCard(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => console.log(err));
   }
-}, [isLoggedIn])
 
-
-function handleCardLike (card) {
-  const isLiked = card.likes.some(i => i._id === currentUser._id);
-  api.toggleLikeCard(card._id, !isLiked)
-    .then((newCard) => {
-      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    })
-    .catch(err => console.log(err));
-}
-
-function handleCardDelete (card) {
-  setIsLoading(true);
-  api.deleteCard(card._id)
-    .then(() => {
-      setCards(cards => cards.filter((c) => c._id != card._id));
-      closeAllPopups();
-    })
-    .catch(err => console.log(err))
-    .finally(() => setIsLoading(false));
-}
-
+  function handleCardDelete (card) {
+    setIsLoading(true);
+    api.deleteCard(card._id)
+      .then(() => {
+        setCards(cards => cards.filter((c) => c._id !== card._id));
+        closeAllPopups();
+      })
+      .catch(err => console.log(err))
+      .finally(() => setIsLoading(false));
+  }
 
 
   React.useEffect(() => {
@@ -82,7 +81,7 @@ function handleCardDelete (card) {
       })
       .catch(err => console.log(err));
     }
-}, [isLoggedIn])
+  }, [isLoggedIn])
 
 
   function editProfile () {

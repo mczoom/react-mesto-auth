@@ -12,8 +12,6 @@
 - БЭМ
 - Figma
 
-## Ссылка на сайт
-https://mczoom.github.io/react-mesto-auth
 
 ### Инструкция по запуску
 #### `npm start`
